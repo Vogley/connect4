@@ -1,8 +1,5 @@
 # Connect 4 II: The Revenge-- Tyler Vogel
 
-Name: Tyler Vogel
-Pitt ID: tjv21
-
 ## Installation
 
 1. Run `pip install -r requirements.txt` in a Python 3.7+ virtual environment
