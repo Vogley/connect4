@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Game Board {{ super() }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+    }
+
+    #topTable {
+        width: 100%;
+    }
+
+    #top10Wrapper{
+        border: 1px solid black;
+        width: 100%;
+    }
+
+    .top10DWrapper, .top10HWrapper{
+        border: 1px solid black;
+    }
+    
+    .top10D{
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+        width: 100%;
+    }
+
+    .top10H {
+        border: 1px solid #444444;
+        text-align: left;
+        padding: 8px;
+        width: 100%;
+        background-color: #333333;
+        color: white;
+    }
+    
+    .top10R:nth-child(even) {
+        background-color: #dddddd;
+    }
+</style>
+{% endblock %}
+
+
+
+
+<!--*   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *-->
+{% block content %}
+
+<h1>Connect 4 II: The Revenge</h1>
+
+
+{% if player %}
+<div id="{{ player.username }}">
+    <a href="{{ url_for("unlogger") }}">Click Here to Logout</a>
+</div>
+
+<div>
+    <h2>Add Games</h2>
+    <h3> Please enter your Username and the Username of your opponenet: </h3>
+    <form name="theForm">
+        Your Username: <input type="text" id="p1" name="" value="" />
+        <br/>
+        Opponenet's Username: <input type="text" id="p2" name="" value="" />
+        <br/>
+        <input type="button" id="theButton" value="Add" />
+    </form>
+</div>
+
+<h2>Current Games</h2>
+    <table id="theTable">
+    </table>
+
+<!--TABLE OF TOP 10-->
+<table id=top10Wrapper>
+    <tr>
+        <th class=top10HWrapper><h2>Personal Top 10 Games</h2></th>
+        <th class=top10HWrapper><h2>All-Time Top 10 Games</h2></th>
+    </tr>
+    <tr>
+        <td class=top10DWrapper>
+            <table class=topTable>
+                <tr class=top10R>
+                    <th class=top10H>Game</th>
+                    <th class=top10H>Turns</th>
+                </tr>
+                
+                
+                {% for game in topPlayerGames %}
+                {% if game != None %}
+                <tr class=top10R>
+                    <td class=top10D><a href="{{ url_for('game', game_id=game.id) }}">{{ game.game_title() }}</a></td>
+                    <td class=top10D>{{ game.turn }}</td>
+                </tr>
+                {% else %}
+                <tr class=top10R>
+                    <td class=top10D>{{ game }}</td>
+                    <td class=top10D>{{ game }}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </table>
+        </td>
+        <td class=top10DWrapper>
+            <table class=topTable>
+                <tr class=top10R>
+                    <th class=top10H>Game</th>
+                    <th class=top10H>Turns</th>
+                </tr>
+                
+                
+                {% for game in topGames %}
+                {% if game != None %}
+                <tr class=top10R>
+                    <td class=top10D><a href="{{ url_for('game', game_id=game.id) }}">{{ game.game_title() }}</a></td>
+                    <td class=top10D>{{ game.turn }}</td>
+                </tr>
+                {% else %}
+                <tr class=top10R>
+                    <td class=top10D>{{ game }}</td>
+                    <td class=top10D>{{ game }}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </table>
+        </td>
+    </tr>
+</table>
+
+
+
+{% else %}
+<h2>Sign In Here</h2>
+<div>
+    <form action="{{ url_for('home') }}" method="post">
+        Username: <input type="text" name="user" /> 
+        <br/>
+        <input type="submit" value="Sign In" />
+    </form>
+</div>
+<h2>Register Here</h2>
+<div>
+    <form action="{{ url_for('add_user') }}" method="post">
+        Username: <input type="text" name="newUser" /> 
+        <br/>
+        Birthday: <input type="date" name="bday" />
+        <br/>
+        <input type="submit" value="Register" />
+    </form>
+</div>
+<br/>
+<!--TABLE OF TOP 10-->
+<table id=top10Wrapper>
+    <tr>
+        <th class=top10HWrapper><h2>All-Time Top 10 Games</h2></th>
+    </tr>
+    <tr>
+        <td class=top10DWrapper>
+            <table class=topTable style="width: 100%">
+                <tr class=top10R>
+                    <th class=top10H>Turns</th>
+                </tr>
+                
+                
+                {% for game in topGames %}
+                {% if game != None %}
+                <tr class=top10R>
+                    <td class=top10D>{{ game.turn }}</td>
+                </tr>
+                {% else %}
+                <tr class=top10R style="width: 100%">
+                    <td class=top10D style="width: 100%">{{ game }}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </table>
+        </td>
+    </tr>
+</table>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    var home = true;
+</script>
+{% endblock %}
